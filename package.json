@@ -1,0 +1,22 @@
+{
+  "name": "itc230",
+  "version": "1.0.0",
+  "description": "sample application for itc230",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jiyunnoh/itc230.git"
+  },
+  "author": "jiyun noh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jiyunnoh/itc230/issues"
+  },
+  "homepage": "https://github.com/jiyunnoh/itc230#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
