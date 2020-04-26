@@ -1,3 +1,9 @@
+'use strict'
+const express = require("express");
+const bodyParser = require("body-parser")
+
+const app = express();
+
 // //To import data.js module
 const data = require("./data");
 
