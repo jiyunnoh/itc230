@@ -1,0 +1,21 @@
+
+
+{{!-- {{#each emp}}
+    <li>Name: {{name}}</li>
+    <li>Age: {{age}}</li>
+    <li>Company: {{company}}</li>
+    <li>Position: {{position}}</li>
+{{/each}} --}}
+{{#if result}}
+<h2>This is {{result.name}} detail page.</h2>
+<ul>
+    <li>Name: {{ result.name }}</li>
+    <li>Age: {{ result.age }}</li>
+    <li>Company: {{ result.company }}</li>
+    <li>Position: {{ result.position }}</li>
+{{else}}
+    not found
+{{/if}}
+</ul>
+
+<p><a href="/">Go back to the home page</a></p>

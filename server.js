@@ -16,6 +16,7 @@ let breeds = [
     {"name":"collie", "origin": "Scotland"},
     {"name":"pug", "origin": "France"}
 ];
+
 // send static file as response. Does it match this patter '/'?
 app.get('/', (req, res) => {
     res.render('home', {name: req.query.name, dog_breed: breeds}); 

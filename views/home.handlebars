@@ -1,8 +1,8 @@
 <h2>Welcome: {{name}}</h2>
 
-Dog Breeds:
+Employees:
 <ul>
-{{#each dog_breed}}
-    <li>{{name}}</li>
+{{#each emp}}
+    <li><a href="/detail?name={{name}}">{{name}}</a></li>
 {{/each}}
 </ul>

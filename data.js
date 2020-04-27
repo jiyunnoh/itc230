@@ -8,3 +8,8 @@ let emp = [
 
 // exports.emp = emp;
 exports.getAll = () => emp;
+exports.get = (name) => {
+    return emp.find((item) => {
+        return item.name === name;
+    });
+};
