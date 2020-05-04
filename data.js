@@ -13,3 +13,20 @@ exports.get = (name) => {
         return item.name === name;
     });
 };
+
+exports.add = (newItem) => {
+    const oldLength = emp.length;
+    let found = this.get(newItem.name);
+    if (!found) {
+        emp.push(newItem);
+    }
+    return {added: oldLength !== emp.length}
+};
+
+exports.delete = (name) => {
+    const oldLength = emp.length;
+    emp = emp.filter((item) => {
+        return item.name !== name;
+    });
+    return {deleted: oldLength !== emp.length}
+};

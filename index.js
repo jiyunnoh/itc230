@@ -3,7 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser")
 const exphbs = require("express-handlebars"); // should be at top of module 
 // //To import data.js module
-const data = require("./data");
+const emp = require("./data");
 
 const app = express();
 app.engine('handlebars', exphbs({defaultLayout: false}));
@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({extended: true})); // parse form submissions. For
 
 // send static file as response. Does it match this patter '/'?
 app.get('/', (req, res) => {
-  res.render('home', {name: req.query.name, emp: data.getAll() }); 
+  res.render('home', {name: req.query.name, emp: emp.getAll() }); 
  });
 
 // send plain text response
@@ -26,7 +26,7 @@ app.get('/about', (req, res) => {
 
  app.get('/detail', function(req,res){
   // console.log(req.query)
-  var found = data.get(req.query.name);
+  var found = emp.get(req.query.name);
   res.render("detail", {
       name: req.query.name, 
       result: found
