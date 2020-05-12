@@ -1,8 +1,8 @@
-<h2>Welcome: {{name}}</h2>
+<h2>Welcome {{name}}</h2>
 
 Employees:
 <ul>
-{{#each emp}}
+{{#each result}}
     <li><a href="/detail?name={{name}}">{{name}}</a></li>
 {{/each}}
 </ul>
