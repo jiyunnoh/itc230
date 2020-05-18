@@ -12,6 +12,8 @@ app.set("view engine", "handlebars");
 
 app.set('port', process.env.PORT || 3000);
 app.use(bodyParser.urlencoded({extended: true})); // parse form submissions. For every requests
+//Your API should allow cross-origin resource sharing for appropriate routes, so it can be used by applications not on your web-site domain.
+app.use('/api', require('cors')()); // set Access-Control-Allow-Origin header for api route
 
 // send static file as response. Does it match this pattern '/'?
 // app.get('/', (req, res) => {
@@ -74,6 +76,48 @@ return Employee.deleteOne({name: req.query.name}).lean()
 .catch(err => next(err));
 });
 
+
+
+//api
+//get a single item
+app.get(('/api/v1/employee/:name'), (req, res, next) => {
+  Employee.findOne({name: req.params.name}, (err, result) => {
+    if(err || !result) return next(err);
+    res.json(result);
+  });
+});
+
+//get all items
+app.get('/api/v1/employees', (req, res, next) => {
+  Employee.find((err, result) => {
+    if(err || !result) return next(err);
+    res.json(result);
+  });
+});
+
+//delete a single item
+app.get(('/api/v1/delete/:name'), (req, res, next) => {
+  Employee.deleteOne({name: req.params.name}, (err, result) => {
+    if(err || !result) return next(err);
+    res.json({"deleted": result.n});
+  });
+});
+
+//Add a new item or update an existing item
+app.get(('/api/v1/add/:name/:age/:company/:position'), (req, res, next) => { 
+  Employee.updateOne({name: req.params.name}, {name: req.params.name, 
+                      age: req.params.age, company: req.params.company, 
+                      position: req.params.position}, {upsert: true}, (err, result) => {
+    if(err) return next(err);
+    if(result.nModified == 0) {
+      res.json("A new item has been added.");
+    }
+    else {
+      res.json("The existing item has been modified.");
+    }
+  });
+});
+
 // define 404 handler. After any other routes
 app.use( (req,res) => {
   res.type('text/plain'); 
@@ -84,6 +128,9 @@ app.use( (req,res) => {
 app.listen(app.get('port'), () => {
   console.log('Express started'); 
 });
+
+
+//-----------------------------------------------------------------------//
 
 //To launch a node.js web server on port 3000 and respond to requests
 //node.js
