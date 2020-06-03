@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>React App Demo</title>
+
+<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+</head>
+
+<body>
+<h2>React Demo</h2>
+<div id="root"></div>
+<script type="text/babel">
+//const greeting = <h1 className="greeting">Hello, world!</h1>;
+
+const getGreeting = (user) => { 
+  if (user) {  
+    return <h1>Hello, {user}!</h1>;
+  }  
+  return <h1>Hello, Stranger.</h1>; 
+}
+const greeting = getGreeting('Jiyun');
+
+const Welcome = (props) => {
+    if (props.status != 'active') {
+        return <h1>Hello, {props.name} (disabled)</h1>; 
+    }
+    return <h1>Hello, {props.name}</h1>;
+}
+// class Welcome extends React.Component {
+//     render() {
+//         if (this.props.status != 'active') {
+//             return <h1>haha</h1>;
+//         }
+//         return <h1>Hello, {this.props.name}</h1>;
+//     }
+// }
+
+const App = () => {
+    const result = (
+        <div>
+            <Welcome name='Mike'/>
+        </div>
+    )
+    return result;
+    // return <div><Welcome name='Mike'/></div>;
+}
+
+// const element = <Welcome name='Mike' age='23' status='active'/>;
+
+ReactDOM.render(<App />, document.getElementById('root'));
+</script>
+
+</body>
+</html>

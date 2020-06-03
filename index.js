@@ -19,10 +19,19 @@ app.use('/api', require('cors')()); // set Access-Control-Allow-Origin header fo
 // app.get('/', (req, res) => {
 //   res.render('home', {name: req.query.name, emp: emp.getAll() }); 
 //  });
-app.get('/', (req, res) => {
+// app.get('/', (req, res) => {
+//   Employee.find({}).lean()
+//     .then((result) => {
+//       res.render('home', { result });
+//       // console.log(result);
+//     })
+//     .catch(err => next(err));
+// });
+
+app.get('/', (req, res, next) => {
   Employee.find({}).lean()
-    .then((result) => {
-      res.render('home', { result });
+    .then((emps) => {
+      res.render('home_react', {emps: JSON.stringify(emps)});
       // console.log(result);
     })
     .catch(err => next(err));
