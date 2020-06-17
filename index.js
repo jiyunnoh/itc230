@@ -9,7 +9,8 @@ const Employee = require("./models/employee")
 const app = express();
 app.engine('handlebars', exphbs({ defaultLayout: false }));
 app.set("view engine", "handlebars");
-
+//to recognize JSON payloads submitted for add/update operations
+app.use(bodyParser.json());
 app.set('port', process.env.PORT || 3000);
 app.use(bodyParser.urlencoded({ extended: true })); // parse form submissions. For every requests
 //Your API should allow cross-origin resource sharing for appropriate routes, so it can be used by applications not on your web-site domain.
@@ -105,8 +106,8 @@ app.get('/api/v1/employees', (req, res, next) => {
 });
 
 //delete a single item
-app.get(('/api/v1/delete/:name'), (req, res, next) => {
-  Employee.deleteOne({ name: req.params.name }, (err, result) => {
+app.get(('/api/v1/delete/:id'), (req, res, next) => {
+  Employee.deleteOne({ "_id": req.params.id }, (err, result) => {
     if (err || !result) return next(err);
     res.json({ "deleted": result.n });
   });
@@ -132,11 +133,11 @@ app.post(('/api/v1/add'), (req, res, next) => {
   const newItem = req.body;
   Employee.update({ name: newItem.name }, newItem, { upsert: true }, (err, result) => {
     if (err) return next(err);
-    if (result.nModified == 0) {
-      res.json("A new item has been added.");
+    if (result.nModified == 0) { //A new item has been added
+      res.json({nModified: 0});
     }
-    else {
-      res.json("The existing item has been modified.");
+    else { //The existing item has been modified
+      res.json({nModified: result.nModified});
     }
   });
 });

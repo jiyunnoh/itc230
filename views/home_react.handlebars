@@ -18,7 +18,7 @@ const EmpList = (props) => {
   <h2>Employees List:</h2>
   <h3><i>Click a list to see the detail</i></h3>  
   <ul>
-  {props.emps.map(item => <li onClick={props.clickHandler} key={item.name}>{item.name}</li>)}
+  {props.emps.map((item) => <li onClick={props.clickHandler} key={item.name}>{item.name}</li>)}
   </ul>
   </div>
 }
@@ -26,10 +26,15 @@ const EmpList = (props) => {
 const EmpDetail = (props) => {
   return <div>
     <h3>Employee Detail:</h3>
-    <p>Name: {props.emp.name}</p>
-    <p>Age: {props.emp.age}</p>
-    <p>Company: {props.emp.company}</p>
-    <p>Position: {props.emp.position}</p>
+    <form>
+      Name: <input onChange={props.change} type="text" name="name" value={props.emp.name || ""} /><p />
+      Age: <input onChange={props.change} type="text" name="age" value={props.emp.age || ""} /><p />
+      Company: <input onChange={props.change} type="text" name="company" value={props.emp.company || ""} /><p />
+      Position: <input onChange={props.change} type="text" name="position" value={props.emp.position || ""} /><p />
+    </form>
+    <p /><button onClick={props.save}>Save</button>
+    <button onClick={props.delete}>Delete</button>
+    <button onClick={props.clear}>Clear</button>
     </div>
 }
 
@@ -38,11 +43,15 @@ class App extends React.Component{
     super(props);
     // Set initial state using data from server application
     this.state = {
-      emp: {{{emps}}},
+      emp: {{{ emps }}},
       currEmp: { } // current selected item
     };
     //This binding in necessary to make 'this' work in the callback
     this.handleClick = this.handleClick.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onSave = this.onSave.bind(this);
+    this.onDelete = this.onDelete.bind(this);
+    this.onClear = this.onClear.bind(this);
   }
 
   handleClick(e) {
@@ -56,12 +65,63 @@ class App extends React.Component{
     });
   }
 
+  onChange(e) {
+    var newItem = this.state.currEmp;
+    newItem[e.target.name] = e.target.value;
+    this.setState({currEmp: newItem});
+  }
+
+  onDelete() {
+    let item = this.state.currEmp;
+    fetch("api/v1/delete/"+item._id)
+      .then((response) => {
+        return response.json();
+      })
+      .then((result) => {
+        console.log(result)
+        // Filter all items except the one to be removed
+        const remainder = this.state.emp.filter((item) => {
+          return item.name !== this.state.currEmp.name;
+          }); 
+          this.setState({emp: remainder, currEmp: {}})
+      })
+      .catch(err => console.log(err))
+  }
+
+  onClear() {
+    this.setState({currEmp: {}});
+  }
+
+  onSave() {
+    let newItem = this.state.currEmp;
+    delete newItem["_id"]
+    fetch("api/v1/add", {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json'},
+      body: JSON.stringify(newItem)
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((result) => {
+        console.log(result)
+        if (result.nModified > 0) { // update an exsiting item
+
+        } else { // add new item to list
+          const newItems = this.state.emp;
+          newItems.push(newItem);
+          this.setState({emp: newItems, currEmp: {}});
+        }
+      })
+      .catch(err => console.log(err))
+  }
+
   render() {
     // render app UI elements
     return (
       <div>
       <EmpList emps={this.state.emp} clickHandler={this.handleClick} />
-      <EmpDetail emp={this.state.currEmp}/>
+      <EmpDetail emp={this.state.currEmp} change={this.onChange} save={this.onSave} delete={this.onDelete} clear={this.onClear} />
       </div>
     );
   }
